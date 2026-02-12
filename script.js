@@ -1,4 +1,5 @@
 const myLibrary = [];
+const libraryEl = document.getElementById("library");
 
 function Book(title, author, pages, read) {
     if (!new.target) {
@@ -17,7 +18,7 @@ function Book(title, author, pages, read) {
 function addBookToLibrary(title, author, pages, read) {
     let book = new Book(title, author, pages, read);
     myLibrary.push(book);
-    refresh();
+    displayBookRegistry();
 }
 
 function removeBookFromLibrary(title) {
@@ -30,18 +31,16 @@ function removeBookFromLibrary(title) {
         console.log(title + " could not be found");
 
     }
-    refresh();
+    displayBookRegistry();
 }
 
+// initializing values
 addBookToLibrary('harry potter', 'J.K rolling', '500', 'true');
 addBookToLibrary('Lord of the rings', 'J.R.R Tolkien', '500', 'true');
 addBookToLibrary('Percy jackson', 'Rick Riordan', '500', 'true');
 addBookToLibrary('Moby dick', ' Herman Melville ', '500', 'true');
 
-
-let libraryEl = document.getElementById("library");
-
-function refresh() {
+function displayBookRegistry() {
     libraryEl.replaceChildren();
     myLibrary.forEach(function (book) {
         libraryEl.appendChild(_createBookCard(book));
@@ -64,6 +63,7 @@ function _createBookCard(book) {
 
     // Read button
     let readButtonEl = document.createElement("button");
+    readButtonEl.className = "read-button";
     readButtonEl.textContent = book.read ? "read" : "not read"
     readButtonEl.addEventListener("click", () => {
         _setBookStatus(book.title, !book.read);
@@ -72,6 +72,7 @@ function _createBookCard(book) {
 
     // remove button
     let removeButtonEl = document.createElement("button");
+    removeButtonEl.className = "remove-button";
     removeButtonEl.textContent = "remove";
     removeButtonEl.addEventListener("click", () => { removeBookFromLibrary(book.title); });
     card.appendChild(removeButtonEl);
@@ -83,9 +84,8 @@ function _setBookStatus(book_title = "", new_status = false) {
     const book = myLibrary.find((b) => b.title == book_title);
     if (book != null) {
         book.read = new_status;
-        console.log(book.read);
     }
-    refresh();
+    displayBookRegistry();
 }
 
-refresh();
+displayBookRegistry();
