@@ -17,6 +17,20 @@ function Book(title, author, pages, read) {
 function addBookToLibrary(title, author, pages, read) {
     let book = new Book(title, author, pages, read);
     myLibrary.push(book);
+    refresh();
+}
+
+function removeBookFromLibrary(title) {
+    const i = myLibrary.indexOf(myLibrary.find(b => b.title == title));
+    if (i != -1) {
+        myLibrary.splice(i, 1);
+        console.log(title + " removed successfully");
+        return;
+    } else {
+        console.log(title + " could not be found");
+
+    }
+    refresh();
 }
 
 addBookToLibrary('harry potter', 'J.K rolling', '500', 'true');
@@ -53,9 +67,14 @@ function _createBookCard(book) {
     readButtonEl.textContent = book.read ? "read" : "not read"
     readButtonEl.addEventListener("click", () => {
         _setBookStatus(book.title, !book.read);
-        refresh();
     });
     card.appendChild(readButtonEl);
+
+    // remove button
+    let removeButtonEl = document.createElement("button");
+    removeButtonEl.textContent = "remove";
+    removeButtonEl.addEventListener("click", () => { removeBookFromLibrary(book.title); });
+    card.appendChild(removeButtonEl);
 
     return card;
 }
@@ -66,6 +85,7 @@ function _setBookStatus(book_title = "", new_status = false) {
         book.read = new_status;
         console.log(book.read);
     }
+    refresh();
 }
 
 refresh();
