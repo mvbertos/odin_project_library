@@ -15,6 +15,8 @@ function Book(title, author, pages, read) {
     }
 }
 
+
+// BOOK MANAGE FUNCTIONS
 function addBookToLibrary(title, author, pages, read) {
     let book = new Book(title, author, pages, read);
     myLibrary.push(book);
@@ -34,17 +36,32 @@ function removeBookFromLibrary(title) {
     displayBookRegistry();
 }
 
+function setBookStatus(book_title = "", new_status = false) {
+    const book = myLibrary.find((b) => b.title == book_title);
+    if (book != null) {
+        book.read = new_status;
+    }
+    displayBookRegistry();
+}
+
 // initializing values
 addBookToLibrary('harry potter', 'J.K rolling', '500', 'true');
 addBookToLibrary('Lord of the rings', 'J.R.R Tolkien', '500', 'true');
 addBookToLibrary('Percy jackson', 'Rick Riordan', '500', 'true');
 addBookToLibrary('Moby dick', ' Herman Melville ', '500', 'true');
 
+
+// VISUAL ELEMENTS
 function displayBookRegistry() {
     libraryEl.replaceChildren();
     myLibrary.forEach(function (book) {
         libraryEl.appendChild(_createBookCard(book));
     });
+
+    let addBookButtonEl = document.createElement("button");
+    addBookButtonEl.addEventListener("click", () => { _createBookForm() })
+    addBookButtonEl.textContent = "Add Book";
+    libraryEl.appendChild(addBookButtonEl);
 }
 
 function _createBookCard(book) {
@@ -66,7 +83,7 @@ function _createBookCard(book) {
     readButtonEl.className = "read-button";
     readButtonEl.textContent = book.read ? "read" : "not read"
     readButtonEl.addEventListener("click", () => {
-        _setBookStatus(book.title, !book.read);
+        setBookStatus(book.title, !book.read);
     });
     card.appendChild(readButtonEl);
 
@@ -80,12 +97,45 @@ function _createBookCard(book) {
     return card;
 }
 
-function _setBookStatus(book_title = "", new_status = false) {
-    const book = myLibrary.find((b) => b.title == book_title);
-    if (book != null) {
-        book.read = new_status;
-    }
-    displayBookRegistry();
+function _createBookForm() {
+    let formEl = document.createElement("form");
+    formEl.id = "register-book-form";
+
+    let titleLabelEl = document.createElement("label");
+    titleLabelEl.textContent = "Book Title:";
+    let titleInputEl = document.createElement("input");
+
+    let authorLabelEl = document.createElement("label");
+    authorLabelEl.textContent = "Author Name:"
+    let authorInputEl = document.createElement("input");
+
+    let pagesLabelEl = document.createElement("label");
+    pagesLabelEl.textContent = "Pages Count:"
+    let pagesInputEl = document.createElement("input");
+
+    let readStatusLabelEl = document.createElement("label");
+    readStatusLabelEl.textContent = "Has been read already:"
+    let readStatusInputEl = document.createElement("input");
+
+    let submitButtonEl = document.createElement("button");
+    submitButtonEl.textContent = "Add";
+    // TODO: adde a listener to the submit button;
+
+    let cancelButtonEl = document.createElement("button");
+    cancelButtonEl.textContent = "Cancel";
+    cancelButtonEl.addEventListener("click", () => { _hideBookForm(); })
+
+    formEl.append(titleLabelEl, titleInputEl, authorLabelEl, authorInputEl, pagesLabelEl, pagesInputEl, readStatusLabelEl, readStatusInputEl, submitButtonEl, cancelButtonEl);
+    libraryEl.appendChild(formEl);
 }
+
+function _hideBookForm() {
+    let formEl = document.getElementById("register-book-form");
+    if (formEl) {
+        formEl.remove();
+    }
+}
+
+
 
 displayBookRegistry();
