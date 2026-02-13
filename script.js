@@ -28,12 +28,12 @@ function removeBookFromLibrary(title) {
     if (i != -1) {
         myLibrary.splice(i, 1);
         console.log(title + " removed successfully");
+        displayBookRegistry();
         return;
     } else {
         console.log(title + " could not be found");
-
     }
-    displayBookRegistry();
+
 }
 
 function setBookStatus(book_title = "", new_status = false) {
