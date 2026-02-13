@@ -98,35 +98,48 @@ function _createBookCard(book) {
 }
 
 function _createBookForm() {
-    let formEl = document.createElement("form");
+    const formEl = document.createElement("form");
     formEl.id = "register-book-form";
 
-    let titleLabelEl = document.createElement("label");
+
+    const titleLabelEl = document.createElement("label");
     titleLabelEl.textContent = "Book Title:";
-    let titleInputEl = document.createElement("input");
+    const titleInputEl = document.createElement("input");
 
-    let authorLabelEl = document.createElement("label");
+    const authorLabelEl = document.createElement("label");
     authorLabelEl.textContent = "Author Name:"
-    let authorInputEl = document.createElement("input");
+    const authorInputEl = document.createElement("input");
 
-    let pagesLabelEl = document.createElement("label");
+    const pagesLabelEl = document.createElement("label");
     pagesLabelEl.textContent = "Pages Count:"
-    let pagesInputEl = document.createElement("input");
+    const pagesInputEl = document.createElement("input");
 
-    let readStatusLabelEl = document.createElement("label");
+    const readStatusLabelEl = document.createElement("label");
     readStatusLabelEl.textContent = "Has been read already:"
-    let readStatusInputEl = document.createElement("input");
+    const readStatusInputEl = document.createElement("input");
+    readStatusInputEl.type = "checkbox";
 
-    let submitButtonEl = document.createElement("button");
+    const submitButtonEl = document.createElement("button");
+    submitButtonEl.type = "submit";
     submitButtonEl.textContent = "Add";
-    // TODO: adde a listener to the submit button;
 
-    let cancelButtonEl = document.createElement("button");
+    const cancelButtonEl = document.createElement("button");
     cancelButtonEl.textContent = "Cancel";
     cancelButtonEl.addEventListener("click", () => { _hideBookForm(); })
 
     formEl.append(titleLabelEl, titleInputEl, authorLabelEl, authorInputEl, pagesLabelEl, pagesInputEl, readStatusLabelEl, readStatusInputEl, submitButtonEl, cancelButtonEl);
     libraryEl.appendChild(formEl);
+
+    formEl.addEventListener("submit", (e) => {
+        e.preventDefault();
+        addBookToLibrary(
+            titleInputEl.value,
+            authorInputEl.value,
+            pagesInputEl.value,
+            readStatusInputEl.checked,
+        );
+        formEl.reset();
+    })
 }
 
 function _hideBookForm() {
