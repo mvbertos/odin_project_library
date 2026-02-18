@@ -58,25 +58,47 @@ function displayBookRegistry() {
         libraryEl.appendChild(_createBookCard(book));
     });
 
-    let addBookButtonEl = document.createElement("button");
-    addBookButtonEl.addEventListener("click", () => { _createBookForm() })
-    addBookButtonEl.textContent = "Add Book";
-    libraryEl.appendChild(addBookButtonEl);
+    _createFormButton();
+}
+
+function _createFormButton() {
+    let createFormButton = document.createElement("button");
+    createFormButton.addEventListener("click", () => { _createBookForm() })
+    createFormButton.textContent = "Add Book";
+    createFormButton.id = "create-form-button";
+    libraryEl.appendChild(createFormButton);
 }
 
 function _createBookCard(book) {
     let card = document.createElement("div");
-    card.className = "Card";
+    card.className = "card";
 
+    let infoDivEl = document.createElement("div");
     // title and author
     let titleEl = document.createElement("p");
     titleEl.textContent = book.title + " by " + book.author
-    card.appendChild(titleEl);
+    titleEl.className = "title";
+    infoDivEl.appendChild(titleEl);
+    // card.appendChild(titleEl);
 
     // pages
     let pagesEl = document.createElement("p");
-    pagesEl.textContent = "pages:" + book.pages;
-    card.appendChild(pagesEl);
+    pagesEl.textContent = book.pages + " pages";
+    pagesEl.className = "pages";
+    infoDivEl.appendChild(pagesEl);
+
+    // remove button
+    let removeButtonEl = document.createElement("button");
+    removeButtonEl.className = "remove-button";
+    removeButtonEl.addEventListener("click", () => { removeBookFromLibrary(book.title); });
+    infoDivEl.appendChild(removeButtonEl);
+
+    // remove button icon
+    let removeIconEl = document.createElement("img");
+    removeIconEl.src = "assets/img/trash-can.svg";
+    removeButtonEl.appendChild(removeIconEl);
+
+    card.appendChild(infoDivEl);
 
     // Read button
     let readButtonEl = document.createElement("button");
@@ -86,21 +108,19 @@ function _createBookCard(book) {
         setBookStatus(book.title, !book.read);
     });
     card.appendChild(readButtonEl);
-
-    // remove button
-    let removeButtonEl = document.createElement("button");
-    removeButtonEl.className = "remove-button";
-    removeButtonEl.textContent = "remove";
-    removeButtonEl.addEventListener("click", () => { removeBookFromLibrary(book.title); });
-    card.appendChild(removeButtonEl);
-
     return card;
 }
 
 function _createBookForm() {
+    //remove add button to not create multiple forms at once
+    let addButtonEl = document.getElementById("create-form-button");
+    if (addButtonEl) addButtonEl.remove();
+
     const formEl = document.createElement("form");
     formEl.id = "register-book-form";
 
+    // const formTitle = document.createAttribute("h1");
+    // formTitle.textContent = "Register New Book";
 
     const titleLabelEl = document.createElement("label");
     titleLabelEl.textContent = "Book Title:";
@@ -113,6 +133,7 @@ function _createBookForm() {
     const pagesLabelEl = document.createElement("label");
     pagesLabelEl.textContent = "Pages Count:"
     const pagesInputEl = document.createElement("input");
+    pagesInputEl.type = "number"
 
     const readStatusLabelEl = document.createElement("label");
     readStatusLabelEl.textContent = "Has been read already:"
@@ -127,7 +148,19 @@ function _createBookForm() {
     cancelButtonEl.textContent = "Cancel";
     cancelButtonEl.addEventListener("click", () => { _hideBookForm(); })
 
-    formEl.append(titleLabelEl, titleInputEl, authorLabelEl, authorInputEl, pagesLabelEl, pagesInputEl, readStatusLabelEl, readStatusInputEl, submitButtonEl, cancelButtonEl);
+    formEl.append(
+        // formTitle,
+        titleLabelEl,
+        titleInputEl,
+        authorLabelEl,
+        authorInputEl,
+        pagesLabelEl, pagesInputEl,
+        readStatusLabelEl,
+        readStatusInputEl,
+        cancelButtonEl,
+        submitButtonEl,
+    );
+
     libraryEl.appendChild(formEl);
 
     formEl.addEventListener("submit", (e) => {
@@ -146,9 +179,8 @@ function _hideBookForm() {
     let formEl = document.getElementById("register-book-form");
     if (formEl) {
         formEl.remove();
+        _createFormButton();
     }
 }
-
-
 
 displayBookRegistry();
