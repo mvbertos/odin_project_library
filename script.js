@@ -45,7 +45,7 @@ function setBookStatus(book_title = "", new_status = false) {
 }
 
 // initializing values
-addBookToLibrary('harry potter', 'J.K rolling', '500', 'true');
+addBookToLibrary('Harry Potter', 'J.K Rowling', '500', 'true');
 addBookToLibrary('Lord of the rings', 'J.R.R Tolkien', '500', 'true');
 addBookToLibrary('Percy jackson', 'Rick Riordan', '500', 'true');
 addBookToLibrary('Moby dick', ' Herman Melville ', '500', 'true');
@@ -103,7 +103,7 @@ function _createBookCard(book) {
     // Read button
     let readButtonEl = document.createElement("button");
     readButtonEl.className = "read-button";
-    readButtonEl.textContent = book.read ? "read" : "not read"
+    readButtonEl.textContent = book.read ? "Read" : "Not Read Yet"
     readButtonEl.addEventListener("click", () => {
         setBookStatus(book.title, !book.read);
     });
@@ -141,10 +141,12 @@ function _createBookForm() {
     readStatusInputEl.type = "checkbox";
 
     const submitButtonEl = document.createElement("button");
+    submitButtonEl.className = "submit-button";
     submitButtonEl.type = "submit";
-    submitButtonEl.textContent = "Add";
+    submitButtonEl.textContent = "Submit";
 
     const cancelButtonEl = document.createElement("button");
+    cancelButtonEl.className = "cancel-button";
     cancelButtonEl.textContent = "Cancel";
     cancelButtonEl.addEventListener("click", () => { _hideBookForm(); })
 
