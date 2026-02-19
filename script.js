@@ -1,37 +1,41 @@
 const myLibrary = [];
 const libraryEl = document.getElementById("library");
 
-function Book(title, author, pages, read) {
+function Book(title, author, pages, read, uid) {
     if (!new.target) {
         throw Error("must use the 'new' operator.")
     }
+
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
+    this.uid = uid;
 
     this.info = function () {
-        return `${title} by ${author}, ${pages}, book ${read ? "already" : "not"} read`;
+        return `${title} by ${author}, ${pages}, book ${read ? "already" : "not"} read, UID ${uid}`;
     }
 }
 
 
 // BOOK MANAGE FUNCTIONS
 function addBookToLibrary(title, author, pages, read) {
-    let book = new Book(title, author, pages, read);
+    let book = new Book(title, author, pages, read, crypto.randomUUID());
     myLibrary.push(book);
+    console.log("added a book: " + book.info());
+
     displayBookRegistry();
 }
 
-function removeBookFromLibrary(title) {
-    const i = myLibrary.indexOf(myLibrary.find(b => b.title == title));
+function removeBookFromLibrary(book_uid) {
+    const i = myLibrary.indexOf(myLibrary.find(b => b.uid == book_uid));
     if (i != -1) {
         myLibrary.splice(i, 1);
-        console.log(title + " removed successfully");
+        console.log(book_uid + " removed successfully");
         displayBookRegistry();
         return;
     } else {
-        console.log(title + " could not be found");
+        console.log(book_uid + " could not be found");
     }
 
 }
@@ -90,7 +94,7 @@ function _createBookCard(book) {
     // remove button
     let removeButtonEl = document.createElement("button");
     removeButtonEl.className = "remove-button";
-    removeButtonEl.addEventListener("click", () => { removeBookFromLibrary(book.title); });
+    removeButtonEl.addEventListener("click", () => { removeBookFromLibrary(book.uid); });
     infoDivEl.appendChild(removeButtonEl);
 
     // remove button icon
